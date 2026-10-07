@@ -1,0 +1,21 @@
+[
+ {
+  "directory": "/home/mbatty/42/des",
+  "arguments": [
+   "cc",
+   "-g",
+   "-MP",
+   "-MMD",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-Iinc/",
+   "-Ilib/",
+   "-c",
+   "src/main.c",
+   "-o",
+   ".obj/src/main.o"
+  ],
+  "file": "src/main.c"
+ }
+]

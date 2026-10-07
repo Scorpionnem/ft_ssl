@@ -1,0 +1,4 @@
+base64
+compile_commands.json
+.obj/
+.cache/
