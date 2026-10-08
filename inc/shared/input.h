@@ -72,7 +72,7 @@ static inline int	input_get_file(const char *path, t_input *in)
 	if (input == (void*)-1)
 	{
 		close(fd);
-		return (dprintf(2, "ft_ssl: mmap: %s\n", strerror(errno)), -1);
+		return (dprintf(2, "ft_ssl: mmap: %s (%s)\n", strerror(errno), path), -1);
 	}
 
 	in->bytes = input;

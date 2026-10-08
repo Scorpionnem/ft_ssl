@@ -20,6 +20,7 @@ int	encode_mode(t_ctx* ctx)
 		return (-1);
 
 	base64_encode(fd, in.bytes, in.size);
+	input_free(&in);
 	return (0);
 }
 
@@ -41,6 +42,7 @@ int	decode_mode(t_ctx* ctx)
 		return (-1);
 
 	base64_decode(fd, in.bytes, in.size);
+	input_free(&in);
 	return (0);
 }
 
