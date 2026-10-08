@@ -27,6 +27,7 @@ $(LIB_DIR):
 
 $(NAME): $(OBJS)
 	$(CC) $(CCFLAGS) -o $@ $(OBJS) $(LFLAGS)
+	@echo Compiled $(NAME)
 
 $(OBJ_DIR)%.o: %.c
 	@mkdir -p $(dir $@)
