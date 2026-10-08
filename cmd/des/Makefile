@@ -1,4 +1,4 @@
-NAME :=	cmd
+NAME :=	des
 
 CC := cc
 CCFLAGS :=	-g -MP -MMD -Wall -Wextra -Werror

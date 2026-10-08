@@ -5,10 +5,12 @@ CMD_PATH := cmd/
 MD5 := md5
 SHA256 := sha256
 BASE64 := base64
+DES := des
 
 MD5_PATH := $(CMD_PATH)$(MD5)
 SHA256_PATH := $(CMD_PATH)$(SHA256)
 BASE64_PATH := $(CMD_PATH)$(BASE64)
+DES_PATH := $(CMD_PATH)$(DES)
 
 CC := cc
 CCFLAGS :=	-g -MP -MMD -Wall -Wextra -Werror
@@ -26,7 +28,7 @@ SRCS :=	src/main.c	\
 OBJS :=	$(SRCS:%.c=$(OBJ_DIR)%.o)
 DEPS :=	$(SRCS:%.c=$(OBJ_DIR)%.d)
 
-all: $(MD5) $(SHA256) $(BASE64) $(NAME)
+all: $(MD5) $(SHA256) $(BASE64) $(DES) $(NAME)
 
 $(LIB_DIR):
 	mkdir -p $(LIB_DIR)
@@ -51,23 +53,30 @@ $(BASE64):
 	@make -C $(BASE64_PATH) all --no-print-directory
 	@cp $(BASE64_PATH)/$(BASE64) $(BASE64)
 
+$(DES):
+	@make -C $(DES_PATH) all --no-print-directory
+	@cp $(DES_PATH)/$(DES) $(DES)
+
 clean:
 	@make -C $(MD5_PATH) clean --no-print-directory
 	@make -C $(SHA256_PATH) clean --no-print-directory
 	@make -C $(BASE64_PATH) clean --no-print-directory
+	@make -C $(DES_PATH) clean --no-print-directory
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	@make -C $(MD5_PATH) fclean --no-print-directory
 	@make -C $(SHA256_PATH) fclean --no-print-directory
 	@make -C $(BASE64_PATH) fclean --no-print-directory
+	@make -C $(DES_PATH) fclean --no-print-directory
 	rm -rf $(NAME)
 	rm -rf $(MD5)
 	rm -rf $(SHA256)
 	rm -rf $(BASE64)
+	rm -rf $(DES)
 
 re: fclean all
 
-.PHONY: all clean fclean re $(NAME) $(MD5) $(SHA256) $(BASE64)
+.PHONY: all clean fclean re $(NAME) $(MD5) $(SHA256) $(BASE64) $(DES)
 
 -include $(DEPS)
