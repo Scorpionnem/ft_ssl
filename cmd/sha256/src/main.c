@@ -1,5 +1,5 @@
 #include "ctx.h"
-#include "md5.h"
+#include "sha256.h"
 #include "shared/itoa.h"
 #include "shared/input.h"
 
@@ -25,20 +25,20 @@ static char*	remove_newlines(char* s, u64 len)
 	return (res);
 }
 
-static char*	md5_str(u8* bytes, u64 len)
+static char*	sha256_str(u8* bytes, u64 len)
 {
-	u8	buf[16] = {};
-	md5(bytes, len, buf);
+	u8	buf[32] = {};
+	sha256(bytes, len, buf);
 
-	static char	res[33] = {};
+	static char	res[65] = {};
 
 	memset(res, 0, sizeof(res));
-	for (uint32_t i = 0; i < 16; i++)
+	for (uint32_t i = 0; i < 32; i++)
 		ft_itoa_hex(res + i * 2, buf[i]);
 	return (res);
 }
 
-static int	print_md5(t_ctx* ctx, char* hash, t_input_type type, char* str_path)
+static int	print_sha256(t_ctx* ctx, char* hash, t_input_type type, char* str_path)
 {
 	if (ctx->opt.quiet.bool_val)
 	{
@@ -51,7 +51,7 @@ static int	print_md5(t_ctx* ctx, char* hash, t_input_type type, char* str_path)
 		case INPUT_STR:
 		{
 			if (!ctx->opt.reverse.bool_val)
-				printf("MD5 (\"%s\") = %s\n", str_path, hash);
+				printf("SHA256 (\"%s\") = %s\n", str_path, hash);
 			if (ctx->opt.reverse.bool_val)
 				printf("%s \"%s\"\n", hash, str_path);
 			return (0);
@@ -59,7 +59,7 @@ static int	print_md5(t_ctx* ctx, char* hash, t_input_type type, char* str_path)
 		case INPUT_FILE:
 		{
 			if (!ctx->opt.reverse.bool_val)
-				printf("MD5 (%s) = %s\n", str_path, hash);
+				printf("SHA256 (%s) = %s\n", str_path, hash);
 			if (ctx->opt.reverse.bool_val)
 				printf("%s %s\n", hash, str_path);
 			return (0);
@@ -73,14 +73,14 @@ static int	print_md5(t_ctx* ctx, char* hash, t_input_type type, char* str_path)
 					return (-1);
 
 				if (!ctx->opt.reverse.bool_val)
-					printf("MD5 (%s) = %s\n", no_nl_str, hash);
+					printf("SHA256 (%s) = %s\n", no_nl_str, hash);
 				if (ctx->opt.reverse.bool_val)
 					printf("%s %s\n", hash, no_nl_str);
 			}
 			else
 			{
 				if (!ctx->opt.reverse.bool_val)
-					printf("MD5 (stdin) = %s\n", hash);
+					printf("sha256 (stdin) = %s\n", hash);
 				if (ctx->opt.reverse.bool_val)
 					printf("%s stdin\n", hash);
 			}
@@ -104,7 +104,7 @@ int	encode(t_ctx* ctx, char **av)
 			av++;
 			continue ;
 		}
-		print_md5(ctx, md5_str(in.bytes, in.size), in.type, *av);
+		print_sha256(ctx, sha256_str(in.bytes, in.size), in.type, *av);
 		input_free(&in);
 		av++;
 	}
@@ -112,14 +112,14 @@ int	encode(t_ctx* ctx, char **av)
 	{
 		if (input_get(&in, INPUT_STR, ctx->opt.string.str_val) == -1)
 			return (-1);
-		print_md5(ctx, md5_str(in.bytes, in.size), in.type, ctx->opt.string.str_val);
+		print_sha256(ctx, sha256_str(in.bytes, in.size), in.type, ctx->opt.string.str_val);
 		input_free(&in);
 	}
 	if (ctx->opt.echo.bool_val || (ctx->take_stdin && !ctx->opt.string.str_val))
 	{
 		if (input_get(&in, INPUT_STDIN, NULL) == -1)
 			return (-1);
-		if (print_md5(ctx, md5_str(in.bytes, in.size), in.type, (char*)in.bytes) == -1)
+		if (print_sha256(ctx, sha256_str(in.bytes, in.size), in.type, (char*)in.bytes) == -1)
 			res = -1;
 		input_free(&in);
 	}
